@@ -14,6 +14,7 @@ Projedeki bütün Türkçe Markdown belgelerinin İngilizce karşılığı bulun
 | Sorun giderme | [Sorun Giderme](TROUBLESHOOTING.md) | [Troubleshooting](TROUBLESHOOTING.en.md) |
 | Destek | [Destek](../SUPPORT.md) | [Support](../SUPPORT.en.md) |
 | Bilinen sınırlamalar | [Bilinen Sınırlamalar](KNOWN_LIMITATIONS.md) | [Known Limitations](KNOWN_LIMITATIONS.en.md) |
+| Clojars paketleme ve yayın | [Clojars Yayın Rehberi](CLOJARS_RELEASE.md) | [Clojars Release Guide](CLOJARS_RELEASE.en.md) |
 
 ## Güvenlik, Hukuk ve Topluluk
 
