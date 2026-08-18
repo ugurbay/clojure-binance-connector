@@ -1,0 +1,67 @@
+{:paths ["src" "resources"]
+
+ :deps
+ {org.clojure/clojure {:mvn/version "1.12.5"}
+  org.clojure/data.json {:mvn/version "2.5.2"}}
+
+ :aliases
+ {:dev
+  {:extra-paths ["dev" "test"]}
+
+  :run
+  {:main-opts ["-m" "binance-clj.core"]}
+
+  :test
+  {:extra-paths ["test"]
+   :extra-deps
+   {io.github.cognitect-labs/test-runner
+    {:git/tag "v0.5.1"
+     :git/sha "dfb30dd"}}
+   :exec-fn cognitect.test-runner.api/test
+   :exec-args {:dirs ["test"]}}
+
+  :integration-test
+  {:extra-paths ["integration-test"]
+   :extra-deps
+   {io.github.cognitect-labs/test-runner
+    {:git/tag "v0.5.1"
+     :git/sha "dfb30dd"}}
+   :exec-fn cognitect.test-runner.api/test
+   :exec-args {:dirs ["integration-test"]}}
+
+  :lint
+  {:replace-deps
+   {clj-kondo/clj-kondo {:mvn/version "2026.05.25"}}
+   :main-opts
+   ["-m" "clj-kondo.main"
+    "--lint" "src" "test" "integration-test" "dev"]}
+
+  :format-check
+  {:replace-deps
+   {dev.weavejester/cljfmt {:mvn/version "0.16.4"}}
+   :main-opts
+   ["-m" "cljfmt.main" "check"
+    "src" "test" "integration-test" "dev"]}
+
+  :format
+  {:replace-deps
+   {dev.weavejester/cljfmt {:mvn/version "0.16.4"}}
+   :main-opts
+   ["-m" "cljfmt.main" "fix"
+    "src" "test" "integration-test" "dev"]}
+
+  :benchmark
+  {:extra-paths ["dev"]
+   :main-opts ["-m" "binance-clj.benchmark"]}
+
+  :secret-scan
+  {:extra-paths ["dev"]
+   :main-opts ["-m" "binance-clj.secret-scan"]}
+
+  :soak
+  {:extra-paths ["dev"]
+   :main-opts ["-m" "binance-clj.soak"]}
+
+  :verify-environment
+  {:extra-paths ["dev"]
+   :main-opts ["-m" "binance-clj.environment"]}}}

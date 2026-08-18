@@ -1,0 +1,42 @@
+name: Feature request
+description: Propose a focused, evidence-backed connector improvement.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        V1 is a Binance Spot manual-trading connector. Strategies, UI, Futures, Margin, and wallet operations are intentionally out of scope.
+  - type: checkboxes
+    attributes:
+      label: Scope checks
+      options:
+        - label: I reviewed ROADMAP.md and KNOWN_LIMITATIONS.md.
+          required: true
+        - label: I searched existing issues and pull requests.
+          required: true
+        - label: The proposal does not require sharing credentials or private account data.
+          required: true
+  - type: textarea
+    attributes:
+      label: Problem
+      description: What concrete user problem should be solved?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed API and behavior
+      description: Show a small data-oriented Clojure example where possible.
+      render: clojure
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Official Binance source
+      description: Link to the official Spot API documentation or changelog.
+      placeholder: https://github.com/binance/binance-spot-api-docs/...
+  - type: textarea
+    attributes:
+      label: Safety and compatibility impact
+      description: Discuss commands, retries, precision, secrets, rate limits, and migration risk.
+    validations:
+      required: true

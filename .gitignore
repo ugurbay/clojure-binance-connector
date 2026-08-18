@@ -1,0 +1,35 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Clojure/JVM build output and caches
+.toolchains/
+.cpcache/
+.cache/
+.clj-kondo/.cache/
+.lsp/
+classes/
+target/
+.nrepl-port
+.socket-repl-port
+pom.xml
+pom.xml.asc
+
+# Logs and generated reports
+*.log
+hs_err_pid*
+replay_pid*
+coverage/
+profiles/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

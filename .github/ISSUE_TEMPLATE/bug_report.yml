@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a reproducible connector defect without credentials or signed payloads.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not report security vulnerabilities here. Follow SECURITY.md instead.
+        Never paste API keys, secrets, private keys, signatures, signed queries, or account identifiers.
+  - type: checkboxes
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed credentials, signatures, signed queries, and private account data.
+          required: true
+        - label: I searched existing issues and read the troubleshooting guide.
+          required: true
+        - label: This is not a private security vulnerability.
+          required: true
+  - type: input
+    attributes:
+      label: Connector version
+      description: Git tag or commit SHA.
+      placeholder: v1.0.0 or full commit SHA
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Runtime
+      description: OS, JDK version, and Clojure CLI version.
+      placeholder: Windows 11, Temurin 25, Clojure CLI ...
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Environment
+      options:
+        - Offline/mock
+        - Spot Testnet
+        - Production (redacted; no order/account details)
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Minimal reproduction
+      description: Include the smallest safe code sample and exact steps.
+      render: clojure
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behavior and safe error data
+      description: Include category/code/reason, but no raw request, credentials, signature, or signed query.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Verification commands
+      description: List tests, lint, and format commands you ran.
