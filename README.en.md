@@ -1,14 +1,16 @@
 # binance-clj
 
+**English** | [Türkçe](README.md) | [Complete bilingual documentation](docs/README.en.md)
+
 A native, data-oriented Clojure connector for the Binance Spot REST API, market WebSocket streams, WebSocket API, and signed User Data Stream.
 
 **Connector V1 is release-gate complete (`:phase 9`, `:status :ready`).** The final Spot Testnet acceptance covered public and signed REST, live WebSocket renewal/restore, signed user events, and a non-marketable LIMIT lifecycle from creation through cancellation.
 
 > [!WARNING]
-> This software can send real orders and may cause financial loss. It is not financial, investment, legal, tax, or accounting advice. Testnet acceptance is not a production guarantee. Read [DISCLAIMER.md](DISCLAIMER.md) before use.
+> This software can send real orders and may cause financial loss. It is not financial, investment, legal, tax, or accounting advice. Testnet acceptance is not a production guarantee. Read [DISCLAIMER.en.md](DISCLAIMER.en.md) before use.
 
 > [!IMPORTANT]
-> This project was developed with substantial assistance from **OpenAI ChatGPT/Codex**, under maintainer direction and acceptance testing. It is not audited, certified, sponsored, or endorsed by OpenAI or Binance. See [NOTICE.md](NOTICE.md).
+> This project was developed with substantial assistance from **OpenAI ChatGPT/Codex**, under maintainer direction and acceptance testing. It is not audited, certified, sponsored, or endorsed by OpenAI or Binance. See [NOTICE.en.md](NOTICE.en.md).
 
 ## Highlights
 
@@ -194,15 +196,18 @@ V1 covers Binance Spot manual trading connectivity. It does not provide strategi
 ## Documentation
 
 - [Turkish README](README.md)
-- [Getting Started](docs/GETTING_STARTED.md) (Turkish)
-- [API Reference](docs/API_REFERENCE.md) (Turkish)
-- [Troubleshooting](docs/TROUBLESHOOTING.md) (Turkish)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Known Limitations](docs/KNOWN_LIMITATIONS.md)
-- [Security Policy](SECURITY.md)
-- [Contribution Guide](CONTRIBUTING.md)
-- [Risk and Legal Disclaimer](DISCLAIMER.md)
+- [Complete bilingual documentation index](docs/README.en.md)
+- [Getting Started](docs/GETTING_STARTED.en.md)
+- [API Reference](docs/API_REFERENCE.en.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.en.md)
+- [Architecture](docs/ARCHITECTURE.en.md)
+- [Endpoint Matrix](docs/BINANCE_ENDPOINT_MATRIX.en.md)
+- [Known Limitations](docs/KNOWN_LIMITATIONS.en.md)
+- [Security Policy](SECURITY.en.md)
+- [Contribution Guide](CONTRIBUTING.en.md)
+- [Risk and Legal Disclaimer](DISCLAIMER.en.md)
+- [AI and Trademark Notice](NOTICE.en.md)
 
 ## License
 
-MIT. See [LICENSE](LICENSE). The license includes warranty and liability limitations; [DISCLAIMER.md](DISCLAIMER.md) provides additional trading-specific warnings. Limitations apply only to the extent permitted by applicable law.
+MIT. See [LICENSE](LICENSE). The license includes warranty and liability limitations; [DISCLAIMER.en.md](DISCLAIMER.en.md) provides additional trading-specific warnings. Limitations apply only to the extent permitted by applicable law.

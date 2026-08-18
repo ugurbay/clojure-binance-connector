@@ -2,6 +2,14 @@
 
 Önemli değişiklikler bu dosyada kaydedilir. Proje [Semantic Versioning](https://semver.org/) yaklaşımını hedefler.
 
+## [Unreleased]
+
+### Eklendi
+
+- Bütün Türkçe Markdown dokümanlarının `.en.md` İngilizce karşılıkları
+- Türkçe ve İngilizce belgeler arasında merkezi iki dilli dokümantasyon dizini
+- İngilizce README içinden İngilizce güvenlik, hukuk, kullanım, API, mimari ve faz kanıtlarına doğrudan bağlantılar
+
 ## [1.0.0] - 2026-08-18
 
 İlk public V1 release adayı.
