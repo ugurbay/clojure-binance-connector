@@ -6,6 +6,10 @@ A native, data-oriented Clojure connector for the Binance Spot REST API, market 
 
 **Connector V1 is release-gate complete (`:phase 9`, `:status :ready`).** The final Spot Testnet acceptance covered public and signed REST, live WebSocket renewal/restore, signed user events, and a non-marketable LIMIT lifecycle from creation through cancellation.
 
+[![CI](https://github.com/ugurbay/clojure-binance-connector/actions/workflows/ci.yml/badge.svg)](https://github.com/ugurbay/clojure-binance-connector/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Clojars](https://img.shields.io/clojars/v/io.github.ugurbay/binance-clj.svg)](https://clojars.org/io.github.ugurbay/binance-clj)
+
 > [!WARNING]
 > This software can send real orders and may cause financial loss. It is not financial, investment, legal, tax, or accounting advice. Testnet acceptance is not a production guarantee. Read [DISCLAIMER.en.md](DISCLAIMER.en.md) before use.
 
@@ -31,6 +35,25 @@ A native, data-oriented Clojure connector for the Binance Spot REST API, market 
 - Git
 
 The project pins Clojure `1.12.5` in `deps.edn`.
+
+## Install from Clojars
+
+Add the library to your Clojure CLI project's `deps.edn`:
+
+```clojure
+{:deps
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.1"}}}
+```
+
+For Leiningen projects:
+
+```clojure
+:dependencies [[io.github.ugurbay/binance-clj "1.0.1"]]
+```
+
+See the [Clojars Release Guide](docs/CLOJARS_RELEASE.en.md) for artifact publication and verification.
+
+## Build from Source
 
 ```powershell
 git clone https://github.com/ugurbay/clojure-binance-connector.git

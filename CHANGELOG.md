@@ -9,6 +9,14 @@
 - Bütün Türkçe Markdown dokümanlarının `.en.md` İngilizce karşılıkları
 - Türkçe ve İngilizce belgeler arasında merkezi iki dilli dokümantasyon dizini
 - İngilizce README içinden İngilizce güvenlik, hukuk, kullanım, API, mimari ve faz kanıtlarına doğrudan bağlantılar
+- Clojars için `io.github.ugurbay/binance-clj` source JAR ve Maven POM üretimi
+- Yerel Maven dış-tüketici doğrulaması ve korumalı Clojars yayın script'i
+- Türkçe ve İngilizce Clojars hesap, token, release ve kullanım rehberi
+
+### Değiştirildi
+
+- Bir sonraki immutable artifact sürümü `VERSION` içinde `1.0.1` olarak tanımlandı
+- Build-only `tools.build` ve `deps-deploy` bağımlılıkları runtime POM'dan ayrıldı
 
 ## [1.0.0] - 2026-08-18
 

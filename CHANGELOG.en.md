@@ -11,6 +11,14 @@ Significant changes are recorded here. The project aims to follow [Semantic Vers
 - `.en.md` English counterparts for every Turkish Markdown document
 - A central bilingual documentation index linking Turkish and English editions
 - Direct English README links to English security, legal, usage, API, architecture, and phase-evidence documents
+- Clojars source-JAR and Maven-POM generation for `io.github.ugurbay/binance-clj`
+- Local-Maven external-consumer verification and a guarded Clojars publication script
+- Turkish and English Clojars account, token, release, and consumer guides
+
+### Changed
+
+- Declared `1.0.1` in `VERSION` as the next immutable artifact version
+- Isolated build-only `tools.build` and `deps-deploy` dependencies from the runtime POM
 
 ## [1.0.0] - 2026-08-18
 

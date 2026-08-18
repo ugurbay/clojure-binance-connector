@@ -34,21 +34,21 @@
    {clj-kondo/clj-kondo {:mvn/version "2026.05.25"}}
    :main-opts
    ["-m" "clj-kondo.main"
-    "--lint" "src" "test" "integration-test" "dev"]}
+    "--lint" "src" "test" "integration-test" "dev" "build.clj"]}
 
   :format-check
   {:replace-deps
    {dev.weavejester/cljfmt {:mvn/version "0.16.4"}}
    :main-opts
    ["-m" "cljfmt.main" "check"
-    "src" "test" "integration-test" "dev"]}
+    "src" "test" "integration-test" "dev" "build.clj"]}
 
   :format
   {:replace-deps
    {dev.weavejester/cljfmt {:mvn/version "0.16.4"}}
    :main-opts
    ["-m" "cljfmt.main" "fix"
-    "src" "test" "integration-test" "dev"]}
+    "src" "test" "integration-test" "dev" "build.clj"]}
 
   :benchmark
   {:extra-paths ["dev"]
@@ -64,4 +64,10 @@
 
   :verify-environment
   {:extra-paths ["dev"]
-   :main-opts ["-m" "binance-clj.environment"]}}}
+   :main-opts ["-m" "binance-clj.environment"]}
+
+  :build
+  {:deps
+   {io.github.clojure/tools.build {:mvn/version "0.10.14"}
+    slipset/deps-deploy {:mvn/version "0.2.5"}}
+   :ns-default build}}}

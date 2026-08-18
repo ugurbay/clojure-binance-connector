@@ -10,6 +10,7 @@ Binance Spot için native, data-oriented ve güvenli Clojure connector/SDK proje
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Clojure](https://img.shields.io/badge/Clojure-1.12.5-blue.svg)](deps.edn)
 [![Java](https://img.shields.io/badge/Java-25-orange.svg)](README.md#gereksinimler)
+[![Clojars](https://img.shields.io/clojars/v/io.github.ugurbay/binance-clj.svg)](https://clojars.org/io.github.ugurbay/binance-clj)
 
 > [!WARNING]
 > Bu yazılım gerçek emir gönderebilir ve maddi kayba yol açabilir. Varsayılan ortam Spot Testnet olsa da production kullanımı teknik olarak mümkündür. Yazılım finansal, yatırım, hukuk veya vergi danışmanlığı değildir. Kullanıcı bütün emirlerden, API anahtarı güvenliğinden, mevzuata ve Binance koşullarına uyumdan tek başına sorumludur. Ayrıntılar için [DISCLAIMER.md](DISCLAIMER.md) dosyasını okuyun.
@@ -22,6 +23,7 @@ Binance Spot için native, data-oriented ve güvenli Clojure connector/SDK proje
 | İhtiyaç | Belge |
 |---|---|
 | İlk kurulum ve adım adım kullanım | [Başlangıç Rehberi](docs/GETTING_STARTED.md) |
+| Clojars paketleme ve release süreci | [Clojars Yayın Rehberi](docs/CLOJARS_RELEASE.md) |
 | Public namespace ve fonksiyon sözleşmeleri | [API Referansı](docs/API_REFERENCE.md) |
 | Hata çözme ve operasyon notları | [Sorun Giderme](docs/TROUBLESHOOTING.md) |
 | Mimari kararlar | [ARCHITECTURE.md](docs/ARCHITECTURE.md) |
@@ -40,6 +42,23 @@ Binance Spot için native, data-oriented ve güvenli Clojure connector/SDK proje
 - Git
 
 Proje Clojure `1.12.5` sürümünü `deps.edn` içinde sabitler. Faz 0 tarihinde referans alınan Clojure CLI sürümü `1.12.5.1664`'tür.
+
+## Clojars ile Kurulum
+
+Clojure CLI projenizin `deps.edn` dosyasına ekleyin:
+
+```clojure
+{:deps
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.1"}}}
+```
+
+Leiningen kullanan projelerde:
+
+```clojure
+:dependencies [[io.github.ugurbay/binance-clj "1.0.1"]]
+```
+
+Artifact yayınlama ve doğrulama süreci için [Clojars Yayın Rehberi](docs/CLOJARS_RELEASE.md) belgesine bakın.
 
 Sisteminizde JDK 25 yoksa, geliştirme ortamı için git tarafından ignore edilen `.toolchains/` altında taşınabilir bir JDK da kullanılabilir. Repository'ye JDK binary'si commit edilmez.
 

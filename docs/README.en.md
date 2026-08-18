@@ -14,6 +14,7 @@ Every Turkish Markdown document in the project has an English counterpart. Turki
 | Troubleshooting | [Troubleshooting](TROUBLESHOOTING.en.md) | [Sorun Giderme](TROUBLESHOOTING.md) |
 | Support | [Support](../SUPPORT.en.md) | [Destek](../SUPPORT.md) |
 | Known limitations | [Known Limitations](KNOWN_LIMITATIONS.en.md) | [Bilinen Sınırlamalar](KNOWN_LIMITATIONS.md) |
+| Clojars packaging and publication | [Clojars Release Guide](CLOJARS_RELEASE.en.md) | [Clojars Yayın Rehberi](CLOJARS_RELEASE.md) |
 
 ## Security, Legal, and Community
 

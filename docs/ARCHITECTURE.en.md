@@ -214,3 +214,9 @@ No runtime dependency is added. Microbenchmarks cover JSON normalization, UDS no
 ## ADR-0050 — Eventual Consistency in Testnet Acceptance
 
 Immediately after successful creation, query may briefly return `-2013` because of Memory → Database visibility. The harness does not treat that as rejection. After UDS observation it polls only safe reads up to 20 times at 250 ms, raising unexpected API errors immediately. New and cancel commands are never repeated. Successful submit `orderId` is retained for a single cleanup cancel if a later acceptance step fails.
+
+## ADR-0051 — Clojars Artifact and Build-Dependency Boundary
+
+The Clojars coordinate is fixed as `io.github.ugurbay/binance-clj` under the verified GitHub reverse-domain group. `VERSION`, Git tag, POM, and JAR version derive from the same source. The artifact is a source JAR containing only `src`, runtime `resources`, the MIT license, AI-development notice, and Maven metadata. Tests, integration fixtures, development code, local toolchains, and credential files are excluded.
+
+`io.github.clojure/tools.build` and `slipset/deps-deploy` are build-time dependencies isolated in the `:build` alias; they do not enter the connector runtime classpath or generated POM dependency list. `tools.build` provides reproducible JAR/POM generation and local installation, while `deps-deploy` performs one artifact/POM upload using Clojars' username plus deploy-token flow. Because release artifacts are immutable, the publication script requires a clean worktree, exact tag, full Phase 9 gate, secret scan, and external-consumer resolution before deployment.

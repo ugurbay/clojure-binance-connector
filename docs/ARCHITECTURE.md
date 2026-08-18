@@ -255,3 +255,9 @@ Yeni runtime dependency eklenmez. Microbenchmark sabit warmup/batch ölçümüyl
 ## ADR-0050 — Testnet Kabulünde Eventual Consistency
 
 Başarılı new-order yanıtının hemen ardından `GET /api/v3/order` kısa süreli `-2013 ORDER_NOT_FOUND` döndürebilir; order query ve open-orders veri kaynağı `Memory → Database` zinciridir. Release harness bu durumu emir reddi saymaz. UDS `executionReport` gözleminden sonra yalnız safe read çağrılarını 250 ms aralıkla en fazla 20 kez gözlemler; beklenmeyen API hatasını anında yükseltir. New-order ve cancel command'ları hiçbir koşulda tekrar gönderilmez. Başarılı submit'ten alınan `orderId` cleanup sınırında saklanır; daha sonraki kabul adımı hata verirse aynı emir tek cancel denemesiyle kapatılır.
+
+## ADR-0051 — Clojars Artifact ve Build Bağımlılık Sınırı
+
+Clojars koordinatı doğrulanmış GitHub reverse-domain grubu üzerinden `io.github.ugurbay/binance-clj` olarak sabitlenir. `VERSION`, Git tag'i, POM ve JAR sürümü aynı tek kaynaktan türetilir. Paket source JAR'dır; yalnız `src`, runtime `resources`, MIT lisansı, AI geliştirme bildirimi ve Maven metadata'sını içerir. Test, integration, dev, local toolchain veya credential dosyaları artifact'e girmez.
+
+`io.github.clojure/tools.build` ve `slipset/deps-deploy` yalnız `:build` alias'ında build-time dependency'dir; connector runtime classpath'ine veya üretilen POM dependency listesine girmez. `tools.build` tekrarlanabilir JAR/POM üretimi ve yerel kurulum için, `deps-deploy` ise Clojars'ın kullanıcı adı + deploy-token akışıyla tek artifact/POM yüklemesi için seçilmiştir. Yayın script'i immutable release riskine karşı temiz worktree, exact tag, tam Faz 9 kapısı, secret scan ve dış tüketici çözümlemesini zorunlu tutar.
