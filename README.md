@@ -1,5 +1,7 @@
 # binance-clj
 
+[English](README.en.md) | **Türkçe** | [Tüm iki dilli dokümantasyon](docs/README.md)
+
 Binance Spot için native, data-oriented ve güvenli Clojure connector/SDK projesi.
 
 **Faz 0–9 tamamlandı; connector V1 `READY` durumundadır.** Full Spot Testnet release kabulünde public/signed REST, WebSocket renewal/restore, signed User Data Stream ve non-marketable LIMIT create/query/open-orders/cancel yaşam döngüsü başarıyla doğrulandı.
@@ -29,7 +31,7 @@ Binance Spot için native, data-oriented ve güvenli Clojure connector/SDK proje
 | Risk ve hukuki uyarılar | [DISCLAIMER.md](DISCLAIMER.md) |
 | AI geliştirme bildirimi | [NOTICE.md](NOTICE.md) |
 | Sürüm geçmişi | [CHANGELOG.md](CHANGELOG.md) |
-| İngilizce proje özeti | [README.en.md](README.en.md) |
+| İngilizce proje ve dokümantasyon | [README.en.md](README.en.md) · [English documentation index](docs/README.en.md) |
 
 ## Gereksinimler
 
