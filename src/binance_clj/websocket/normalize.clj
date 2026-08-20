@@ -29,6 +29,29 @@
             level))
         levels))
 
+(defn- normalize-aggregate-trade
+  [event]
+  (when-not (and (string? (:s event))
+                 (every? #(and (integer? %) (not (neg? %)))
+                         [(:E event) (:a event) (:f event) (:l event) (:T event)])
+                 (instance? java.math.BigDecimal (:p event))
+                 (pos? (.signum ^java.math.BigDecimal (:p event)))
+                 (instance? java.math.BigDecimal (:q event))
+                 (pos? (.signum ^java.math.BigDecimal (:q event)))
+                 (boolean? (:m event))
+                 (<= (:f event) (:l event)))
+    (throw (ex-info "Aggregate-trade payload is malformed."
+                    {:event-type "aggTrade"})))
+  (assoc event
+         :aggregate-trade-id (:a event)
+         :buyer-market-maker? (:m event)
+         :first-trade-id (:f event)
+         :price (:p event)
+         :quantity (:q event)
+         :last-trade-id (:l event)
+         :symbol (:s event)
+         :trade-time (:T event)))
+
 (defn normalize-market-event
   "Normalizes supported market payloads and preserves unknown fields."
   [payload]
@@ -36,8 +59,12 @@
     {:events (mapv normalize-market-event payload)
      :event-type "miniTickerArray"
      :kind :market-event-batch}
-    (let [event (if (map? payload) payload {:raw payload})]
-      (cond-> (parse-fields event market-decimal-fields)
+    (let [event (if (map? payload) payload {:raw payload})
+          normalized (parse-fields event market-decimal-fields)
+          normalized (if (= "aggTrade" (:e normalized))
+                       (normalize-aggregate-trade normalized)
+                       normalized)]
+      (cond-> normalized
         (vector? (:bids event)) (update :bids parse-levels)
         (vector? (:asks event)) (update :asks parse-levels)
         true (assoc :kind :market-event

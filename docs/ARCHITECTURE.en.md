@@ -61,7 +61,7 @@ Because legacy listen-key REST endpoints were removed, V1 uses WebSocket API `us
 
 ## ADR-0012 — Current Market Stream Scope
 
-Removed `!ticker@arr` is not implemented. Use `!miniTicker@arr`, per-symbol `<symbol>@ticker`, `<symbol>@bookTicker`, and partial-depth streams. Full local order-book reconstruction is outside V1.
+Removed `!ticker@arr` is not implemented. Use `!miniTicker@arr`, per-symbol `<symbol>@ticker`, taker-order aggregate trades via `<symbol>@aggTrade`, `<symbol>@bookTicker`, and partial-depth streams. Each partial-depth event is an atomic top-5/10/20 view; it is not assigned diff-depth continuity or full local-order-book accuracy. Full local order-book reconstruction is outside V1.
 
 ## ADR-0013 — Phase 2 Public Client Contract
 

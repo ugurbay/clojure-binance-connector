@@ -29,6 +29,11 @@
   [symbol]
   (str (stream-symbol symbol) "@ticker"))
 
+(defn aggregate-trades
+  "Returns the real-time aggregate-trade stream for one Spot symbol."
+  [symbol]
+  (str (stream-symbol symbol) "@aggTrade"))
+
 (defn book-ticker
   "Returns an individual best bid/ask stream name."
   [symbol]

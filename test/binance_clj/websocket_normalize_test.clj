@@ -25,7 +25,37 @@
     (let [event (sut/normalize-stream-message
                  [{:e "24hrMiniTicker" :s "BTCUSDT" :c "10.1"}])]
       (is (= :market-event-batch (:kind event)))
-      (is (= 10.1M (get-in event [:events 0 :c]))))))
+      (is (= 10.1M (get-in event [:events 0 :c])))))
+  (testing "aggregate trade has exact finance fields and stable aliases"
+    (let [event (sut/normalize-stream-message
+                 {:e "aggTrade" :E 1672515782136 :s "BTCUSDT" :a 12345
+                  :p "62123.45000000" :q "0.12500000" :f 100 :l 105
+                  :T 1672515782135 :m false :M true :future "kept"})]
+      (is (= :market-event (:kind event)))
+      (is (= "aggTrade" (:event-type event)))
+      (is (= 12345 (:aggregate-trade-id event)))
+      (is (= 62123.45000000M (:price event)))
+      (is (= 0.12500000M (:quantity event)))
+      (is (= "BTCUSDT" (:symbol event)))
+      (is (= 100 (:first-trade-id event)))
+      (is (= 105 (:last-trade-id event)))
+      (is (= 1672515782135 (:trade-time event)))
+      (is (false? (:buyer-market-maker? event)))
+      (is (= "kept" (:future event))))))
+
+(deftest malformed-aggregate-trade-is-rejected-test
+  (doseq [payload [{:e "aggTrade" :E 1 :s "BTCUSDT" :a 2
+                    :p "not-a-price" :q "1" :f 3 :l 3 :T 1 :m false}
+                   {:e "aggTrade" :E 1 :s "BTCUSDT" :a 2
+                    :p "1" :q "0" :f 3 :l 3 :T 1 :m false}
+                   {:e "aggTrade" :E 1 :s "BTCUSDT" :a nil
+                    :p "1" :q "1" :f 3 :l 3 :T 1 :m false}
+                   {:e "aggTrade" :E 1 :s "BTCUSDT" :a 2
+                    :p "1" :q "1" :f 3 :l 3 :T 1 :m nil}
+                   {:e "aggTrade" :E 1 :s "BTCUSDT" :a 2
+                    :p "1" :q "1" :f 4 :l 3 :T 1 :m false}]]
+    (is (thrown? clojure.lang.ExceptionInfo
+                 (sut/normalize-stream-message payload)))))
 
 (deftest user-events-preserve-original-fields-and-add-stable-aliases-test
   (let [event (sut/normalize-websocket-api-message

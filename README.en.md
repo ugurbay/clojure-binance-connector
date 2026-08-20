@@ -42,13 +42,13 @@ Add the library to your Clojure CLI project's `deps.edn`:
 
 ```clojure
 {:deps
- {io.github.ugurbay/binance-clj {:mvn/version "1.0.1"}}}
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}
 ```
 
 For Leiningen projects:
 
 ```clojure
-:dependencies [[io.github.ugurbay/binance-clj "1.0.1"]]
+:dependencies [[io.github.ugurbay/binance-clj "1.0.2"]]
 ```
 
 See the [Clojars Release Guide](docs/CLOJARS_RELEASE.en.md) for artifact publication and verification.
@@ -168,6 +168,7 @@ Never interpret `:unresolved` as “the order does not exist,” and never resub
          '[binance-clj.spot.user-stream :as user-stream])
 
 (def market-stream (streams/create-stream connector))
+(streams/subscribe! market-stream (streams/aggregate-trades "BTCUSDT"))
 (streams/subscribe! market-stream (streams/book-ticker "BTCUSDT"))
 (streams/connect! market-stream)
 (streams/poll-event! market-stream 1000)

@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [switch] $RunFullTestnet,
+    [switch] $RunPublicAggTrade,
     [ValidateRange(1, 300)] [int] $SoakSeconds = 10
 )
 
@@ -63,6 +64,20 @@ function Invoke-FullTestnetAcceptance {
     }
 }
 
+function Invoke-PublicAggTradeAcceptance {
+    $name = 'BINANCE_RUN_PUBLIC_AGGTRADE_PRODUCTION'
+    $previous = [Environment]::GetEnvironmentVariable($name, 'Process')
+    try {
+        [Environment]::SetEnvironmentVariable($name, 'true', 'Process')
+        Invoke-PhaseCheck 'Credential-free production aggTrade and reconnect acceptance' {
+            clojure -X:integration-test
+        }
+    }
+    finally {
+        [Environment]::SetEnvironmentVariable($name, $previous, 'Process')
+    }
+}
+
 Push-Location $projectRoot
 try {
     Invoke-PhaseCheck 'Environment' { clojure -M:verify-environment }
@@ -72,6 +87,10 @@ try {
 
     if ($RunFullTestnet) {
         Invoke-FullTestnetAcceptance
+    }
+
+    if ($RunPublicAggTrade) {
+        Invoke-PublicAggTradeAcceptance
     }
 
     Invoke-PhaseCheck 'Credential and secret leakage scan' { clojure -M:secret-scan }

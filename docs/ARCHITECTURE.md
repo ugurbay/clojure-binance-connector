@@ -64,7 +64,7 @@ Legacy listen-key REST uçları kaldırıldığı için V1 User Data Stream, Web
 
 ## ADR-0012 — Güncel Market Stream Kapsamı
 
-Kaldırılan `!ticker@arr` uygulanmayacaktır. Bütün piyasa özeti `!miniTicker@arr`, full 24 saat ticker sembol bazlı `<symbol>@ticker`, best bid/ask `<symbol>@bookTicker`, top depth partial depth streamleriyle sağlanır. Tam local order book reconstruction V1 dışındadır.
+Kaldırılan `!ticker@arr` uygulanmayacaktır. Bütün piyasa özeti `!miniTicker@arr`, full 24 saat ticker sembol bazlı `<symbol>@ticker`, taker-emri bazlı aggregate trade `<symbol>@aggTrade`, best bid/ask `<symbol>@bookTicker` ve top depth partial depth streamleriyle sağlanır. Partial depth her event'te atomik top-5/10/20 görünümüdür; diff-depth continuity veya tam local order book doğruluğu atfedilmez. Tam local order book reconstruction V1 dışındadır.
 
 ## ADR-0013 — Faz 2 Public Client Sözleşmesi
 

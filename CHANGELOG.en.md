@@ -6,6 +6,21 @@ Significant changes are recorded here. The project aims to follow [Semantic Vers
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-08-20
+
+### Added
+
+- Public `aggregate-trades` stream helper (`<symbol>@aggTrade`)
+- Exact-`BigDecimal` price/quantity and stable aliases for `aggTrade`
+- Contract tests for ID ranges, maker flags, and malformed payloads
+- Credential-free production `aggTrade` reconnect/restore acceptance gate
+
+### Clarified
+
+- Partial depth is an atomic top-N view, not diff-depth continuity or a full book
+
+## [1.0.1] - 2026-08-18
+
 ### Added
 
 - `.en.md` English counterparts for every Turkish Markdown document
@@ -17,7 +32,7 @@ Significant changes are recorded here. The project aims to follow [Semantic Vers
 
 ### Changed
 
-- Declared `1.0.1` in `VERSION` as the next immutable artifact version
+- Declared immutable artifact version `1.0.1` in `VERSION`
 - Isolated build-only `tools.build` and `deps-deploy` dependencies from the runtime POM
 
 ## [1.0.0] - 2026-08-18
@@ -53,4 +68,7 @@ Initial public V1 release candidate.
 - Credential and signature redaction
 - `.env`, key files, and local toolchains excluded from Git
 
+[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ugurbay/clojure-binance-connector/releases/tag/v1.0.0

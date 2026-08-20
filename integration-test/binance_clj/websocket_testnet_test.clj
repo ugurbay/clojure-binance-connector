@@ -119,6 +119,32 @@
             (streams/close! stream)
             (client/close! connector)))))))
 
+(deftest public-aggregate-trade-production-contract-test
+  (if-not (enabled? "BINANCE_RUN_PUBLIC_AGGTRADE_PRODUCTION")
+    (is true "Skipped; set BINANCE_RUN_PUBLIC_AGGTRADE_PRODUCTION=true to opt in.")
+    (testing "credential-free production aggTrade survives normalization and restore"
+      (let [connector (client/create-client {:environment :production})
+            stream (streams/create-stream connector)
+            matches? #(and (= "aggTrade" (:event-type %))
+                           (= "BTCUSDT" (:symbol %)))]
+        (try
+          (streams/subscribe! stream (streams/aggregate-trades "BTCUSDT"))
+          (streams/connect! stream)
+          (let [event (await-event #(streams/poll-event! stream %) matches? 15000)]
+            (is (map? event))
+            (is (decimal? (:price event)))
+            (is (decimal? (:quantity event)))
+            (is (integer? (:aggregate-trade-id event)))
+            (is (<= (:first-trade-id event) (:last-trade-id event)))
+            (is (boolean? (:buyer-market-maker? event))))
+          (let [generation (:generation (streams/snapshot stream))]
+            (is (true? (streams/renew! stream)))
+            (is (some? (await-generation stream generation 15000)))
+            (is (map? (await-event #(streams/poll-event! stream %) matches? 15000))))
+          (finally
+            (streams/close! stream)
+            (client/close! connector)))))))
+
 (deftest signed-user-stream-testnet-subscription-test
   (if-not (enabled? "BINANCE_RUN_SIGNED_WEBSOCKET_TESTNET")
     (is true "Skipped; set BINANCE_RUN_SIGNED_WEBSOCKET_TESTNET=true to opt in.")

@@ -49,13 +49,13 @@ Clojure CLI projenizin `deps.edn` dosyasına ekleyin:
 
 ```clojure
 {:deps
- {io.github.ugurbay/binance-clj {:mvn/version "1.0.1"}}}
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}
 ```
 
 Leiningen kullanan projelerde:
 
 ```clojure
-:dependencies [[io.github.ugurbay/binance-clj "1.0.1"]]
+:dependencies [[io.github.ugurbay/binance-clj "1.0.2"]]
 ```
 
 Artifact yayınlama ve doğrulama süreci için [Clojars Yayın Rehberi](docs/CLOJARS_RELEASE.md) belgesine bakın.
@@ -392,6 +392,7 @@ Market ve hesap akışları farklı Binance uç noktalarında çalışır; bağl
 ;; Abonelikleri bağlantıdan önce kaydetmek ilk restore'u tek mesaj yapar.
 (def market-stream (streams/create-stream connector))
 (streams/subscribe! market-stream (streams/all-mini-tickers))
+(streams/subscribe! market-stream (streams/aggregate-trades "BTCUSDT"))
 (streams/subscribe! market-stream (streams/book-ticker "BTCUSDT"))
 (streams/subscribe! market-stream (streams/partial-depth "BTCUSDT" 20 100))
 (streams/connect! market-stream)
@@ -416,7 +417,7 @@ Varsayılan event buffer kapasitesi 1024, overflow politikası `:drop-oldest`tir
 
 ## Faz 9 Release Gate
 
-`verify-phase-9.ps1` varsayılan olarak JDK/runtime, unit/mock, ağsız integration, secret scan, lint, format, microbenchmark ve bounded event soak çalıştırır. `-RunFullTestnet` ayrıca public/signed REST, market WebSocket renewal/restore ve tek bir non-marketable LIMIT create/query/open-orders/cancel yaşam döngüsünü doğrular.
+`verify-phase-9.ps1` varsayılan olarak JDK/runtime, unit/mock, ağsız integration, secret scan, lint, format, microbenchmark ve bounded event soak çalıştırır. `-RunPublicAggTrade` kimlik gerektirmeden production `aggTrade` akışını ve reconnect/restore davranışını; `-RunFullTestnet` ise public/signed REST, market WebSocket renewal/restore ve tek bir non-marketable LIMIT create/query/open-orders/cancel yaşam döngüsünü doğrular.
 
 LIMIT kabulü güncel Binance filtrelerinden türetilir; sabit price/quantity kullanmaz. Emir `submit-order!` ile tam bir kez oluşturulur, User Data Stream'de `NEW` görülür, tek cancel sonrası `CANCELED` doğrulanır ve final open-orders listesinden kaybolduğu kanıtlanır. Test yalnız sanal Spot Testnet fonları kullanır.
 

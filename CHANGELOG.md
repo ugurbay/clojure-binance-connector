@@ -4,6 +4,21 @@
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-08-20
+
+### Eklendi
+
+- Public `aggregate-trades` stream helper'ı (`<symbol>@aggTrade`)
+- `aggTrade` için exact `BigDecimal` fiyat/miktar ve kararlı alan alias'ları
+- Kimlik aralığı, maker flag ve bozuk payload contract testleri
+- Kimliksiz production `aggTrade` ile reconnect/restore kabul kapısı
+
+### Netleştirildi
+
+- Partial depth atomik top-N görünümüdür; diff-depth continuity veya tam defter sayılmaz
+
+## [1.0.1] - 2026-08-18
+
 ### Eklendi
 
 - Bütün Türkçe Markdown dokümanlarının `.en.md` İngilizce karşılıkları
@@ -15,7 +30,7 @@
 
 ### Değiştirildi
 
-- Bir sonraki immutable artifact sürümü `VERSION` içinde `1.0.1` olarak tanımlandı
+- Immutable artifact sürümü `VERSION` içinde `1.0.1` olarak tanımlandı
 - Build-only `tools.build` ve `deps-deploy` bağımlılıkları runtime POM'dan ayrıldı
 
 ## [1.0.0] - 2026-08-18
@@ -52,4 +67,7 @@
 - Credential ve signature redaction
 - `.env`, key dosyaları ve local toolchain git dışında
 
+[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ugurbay/clojure-binance-connector/releases/tag/v1.0.0
