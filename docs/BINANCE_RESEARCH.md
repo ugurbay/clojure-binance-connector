@@ -256,3 +256,11 @@ WebSocket API signing'de iki SDK alfabetik sırayı doğrulasa da ortak URL-enco
 User Data Stream'in güncel primary yolu `userDataStream.subscribe.signature` olmaya devam etmektedir. Request `apiKey`, `timestamp`, `signature` ve opsiyonel en fazla 60000 ms `recvWindow` taşır; weight 2'dir. Connection başına aynı account için tek subscription, session başına 1000 aktif ve yaşam boyunca 65535 toplam subscription sınırı vardır. Eventler `{subscriptionId,event}` envelope'undadır.
 
 Implementasyon bu nedenle pong'u transport callback'inde gecikmeden yollar, market restore'u batch eder, UDS restore'da yeni imza üretir ve 23 saat 50 dakikada planlı renewal başlatır. Anahtarsız Spot Testnet `BTCUSDT@bookTicker` canlı kabulü aynı tarihte geçmiştir.
+
+## 1.0.3 STOP_LOSS Yeniden Doğrulama Kaydı
+
+2026-08-22 tarihinde resmî Spot new-order ve filter sözleşmeleri yeniden incelendi. `STOP_LOSS`, `quantity` ile `stopPrice` veya `trailingDelta` ister ve tetiklendiğinde MARKET order çalıştırır. `PRICE_FILTER` hem `price` hem `stopPrice` için geçerlidir; `LOT_SIZE` quantity'yi sınırlar. Matching-engine timeout veya `5xx` sonucu yine UNKNOWN'dır ve UDS/order query ile sorgulanmalıdır.
+
+1.0.3 yalnız botun somut felaket koruması ihtiyacındaki sabit fiyatlı `STOP_LOSS` alt kümesini ekler. `trailingDelta`, `STOP_LOSS_LIMIT`, TAKE_PROFIT ve order-list özellikleri ihtiyaç dışı bırakılır. Böylece destek beyanı dar ve test edilebilir kalırken emir mevcut tek-POST reconciliation sınırından ayrılmaz.
+
+Kaynaklar: [Spot REST trading endpoints](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#new-order-trade), [Spot filters](https://github.com/binance/binance-spot-api-docs/blob/master/filters.md), [Spot User Data Stream](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md).

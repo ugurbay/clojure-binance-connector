@@ -4,6 +4,20 @@
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-08-22
+
+### Eklendi
+
+- Binance Spot `STOP_LOSS` emirleri için public `validate-order`, `test-order`, `new-order` ve `submit-order!` desteği
+- `stopPrice` wire mapping, exact `BigDecimal` normalizasyonu ve `PRICE_FILTER`/`LOT_SIZE`/market-notional preflight
+- Zorunlu alan, yasak alan, tick alignment ve gerçek request parametrelerini kapsayan contract testleri
+- User Data Stream `executionReport` son gerçekleşen miktar alanı `l` için exact `BigDecimal` normalizasyonu
+
+### Güvenlik
+
+- Botun fill sonrası felaket koruması artık raw HTTP kestirmesi olmadan public connector sınırından kurulabilir
+- `STOP_LOSS` state-changing command'ı mevcut exactly-one submit ve unknown-execution reconciliation politikasını aynen kullanır
+
 ## [1.0.2] - 2026-08-20
 
 ### Eklendi
@@ -67,7 +81,8 @@
 - Credential ve signature redaction
 - `.env`, key dosyaları ve local toolchain git dışında
 
-[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ugurbay/clojure-binance-connector/releases/tag/v1.0.0

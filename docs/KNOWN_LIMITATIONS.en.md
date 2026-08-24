@@ -35,6 +35,7 @@
 - Trading timeout, `-1006`, `-1007`, and relevant `5xx` do not prove success or failure. No automatic resubmit occurs; if bounded query finds nothing, the result stays `unresolved`.
 - Cancellation is also state-changing and is not generically retried after network/`5xx` uncertainty.
 - New-order request weight and unfilled-order count impact are each 1. For rejected responses without headers, a local order count is only a conservative estimate.
+- `STOP_LOSS` receives static `PRICE_FILTER`, `LOT_SIZE`, and market-notional preflight. Whether its trigger is on the valid side of the live market is a matching-engine rule; the connector does not guess it and preserves Binance's rejection.
 - V1 sends all REST parameters in the query string and does not expose mixed form-body behavior.
 - Binance has no separate `RAW_REQUESTS` response header. The transport tracks actual local wire attempts, while `exchangeInfo` rate-limit data is preserved but not converted into an automatic concurrency budget.
 - Valid all-market ticker calls can be expensive. The connector tracks dynamic weight but does not forbid them.

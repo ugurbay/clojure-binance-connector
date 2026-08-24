@@ -18,7 +18,7 @@ validation → timestamp → signing → transport → parsing
 Binance Spot REST / WebSocket
 ```
 
-The connector provides public market data, signed account data, manual MARKET/LIMIT orders, and real-time streams. Strategy, risk decisions, position sizing, and persistent business state belong to the calling application.
+The connector provides public market data, signed account data, manual MARKET/LIMIT/STOP_LOSS orders, and real-time streams. Strategy, risk decisions, position sizing, and persistent business state belong to the calling application.
 
 ## 2. Prerequisites
 

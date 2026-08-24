@@ -16,7 +16,7 @@ validation → timestamp → signing → transport → parsing
 Binance Spot REST / WebSocket
 ```
 
-Connector public market verisi, signed account verisi, manuel MARKET/LIMIT emirleri ve realtime stream'ler sunar. Strateji, risk kararı, position sizing ve kalıcı business state çağıran uygulamanın sorumluluğudur.
+Connector public market verisi, signed account verisi, manuel MARKET/LIMIT/STOP_LOSS emirleri ve realtime stream'ler sunar. Strateji, risk kararı, position sizing ve kalıcı business state çağıran uygulamanın sorumluluğudur.
 
 ## 2. Ön Koşullar
 

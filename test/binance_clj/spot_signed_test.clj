@@ -144,6 +144,40 @@
         (is (every? #(<= (count %) 36) ids)))
       (finally (client/close! connector)))))
 
+(deftest stop-loss-catastrophe-order-wire-contract-test
+  (let [captured (atom nil)
+        connector (client-with-response
+                   {:symbol "BTCUSDT"
+                    :orderId 11
+                    :clientOrderId "catastrophe-stop-1"
+                    :price "0.0"
+                    :stopPrice "4900.0"
+                    :origQty "0.002"
+                    :executedQty "0.0"
+                    :cummulativeQuoteQty "0.0"
+                    :status "NEW"
+                    :type "STOP_LOSS"
+                    :side "SELL"}
+                   captured)]
+    (try
+      (let [result (sut/new-order
+                    connector
+                    filter-fixture/symbol-info
+                    {:symbol "BTCUSDT"
+                     :side :sell
+                     :type :stop-loss
+                     :quantity 0.002M
+                     :stop-price 4900M
+                     :new-client-order-id "catastrophe-stop-1"}
+                    {:reference-price 5000M})]
+        (is (= "STOP_LOSS" (get-in @captured [:params :type])))
+        (is (= 4900M (get-in @captured [:params :stopPrice])))
+        (is (= 0.002M (get-in @captured [:params :quantity])))
+        (is (nil? (get-in @captured [:params :price])))
+        (is (nil? (get-in @captured [:params :timeInForce])))
+        (is (= 4900.0M (get-in result [:data :stopPrice]))))
+      (finally (client/close! connector)))))
+
 (deftest commission-test-order-response-and-dynamic-weight-test
   (let [captured (atom nil)
         response {:standardCommissionForOrder {:maker "0.001" :taker "0.002"}

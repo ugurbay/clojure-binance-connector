@@ -16,7 +16,7 @@
 
 (def ^:private order-keys
   #{:new-client-order-id :new-order-response-type :price :quantity
-    :quote-order-qty :side :symbol :time-in-force :type})
+    :quote-order-qty :side :stop-price :symbol :time-in-force :type})
 
 (defn- fail!
   [endpoint-id message data]
@@ -206,6 +206,7 @@
     (contains? order :quantity) (assoc :quantity (:quantity order))
     (contains? order :quote-order-qty) (assoc :quoteOrderQty (:quote-order-qty order))
     (contains? order :price) (assoc :price (:price order))
+    (contains? order :stop-price) (assoc :stopPrice (:stop-price order))
     (contains? order :new-order-response-type)
     (assoc :newOrderRespType
            (enum-value endpoint-id

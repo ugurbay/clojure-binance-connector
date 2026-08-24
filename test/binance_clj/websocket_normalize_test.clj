@@ -62,13 +62,18 @@
                {:subscriptionId 7
                 :event {:e "executionReport" :s "BTCUSDT" :c "clj-1"
                         :x "TRADE" :X "PARTIALLY_FILLED" :i 42
-                        :p "100.00" :q "0.010" :z "0.005"
+                        :p "100.00" :q "0.010" :L "101.25" :l "0.005"
+                        :z "0.005" :n "0.000005" :N "BTC" :t 77
                         :futureField "kept"}})]
     (is (= :user-event (:kind event)))
     (is (= 7 (:subscription-id event)))
     (is (= "clj-1" (:client-order-id event)))
     (is (= "PARTIALLY_FILLED" (:order-status event)))
     (is (= 100.00M (:p event)))
+    (is (= 101.25M (:L event)))
+    (is (= 0.005M (:l event)))
+    (is (= 0.000005M (:n event)))
+    (is (instance? BigDecimal (:l event)))
     (is (= "kept" (:futureField event)))))
 
 (deftest account-and-control-responses-are-distinct-test

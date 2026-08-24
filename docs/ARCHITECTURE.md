@@ -260,4 +260,8 @@ Başarılı new-order yanıtının hemen ardından `GET /api/v3/order` kısa sü
 
 Clojars koordinatı doğrulanmış GitHub reverse-domain grubu üzerinden `io.github.ugurbay/binance-clj` olarak sabitlenir. `VERSION`, Git tag'i, POM ve JAR sürümü aynı tek kaynaktan türetilir. Paket source JAR'dır; yalnız `src`, runtime `resources`, MIT lisansı, AI geliştirme bildirimi ve Maven metadata'sını içerir. Test, integration, dev, local toolchain veya credential dosyaları artifact'e girmez.
 
+## ADR-0052 — STOP_LOSS Felaket Koruması Public Sınırı
+
+Spot `STOP_LOSS`, tetiklenince MARKET emir çalıştıran koşullu emir olarak public order map sözleşmesine eklenir. Connector yalnız statik ve kanıtlanabilir kuralları uygular: symbol `orderTypes`, `quantity`, `stopPrice`, `LOT_SIZE`, `PRICE_FILTER` ve çağıranın verdiği güncel reference price ile market-notional. Tetikleyicinin canlı piyasa fiyatına göre doğru tarafta olup olmadığı matching engine sorumluluğudur. Emir aynı new-order endpoint'ini, production çift guard'ını, benzersiz client order id'yi, tek POST ve query/UDS reconciliation politikasını kullanır; ayrı veya daha gevşek bir transport yolu yoktur.
+
 `io.github.clojure/tools.build` ve `slipset/deps-deploy` yalnız `:build` alias'ında build-time dependency'dir; connector runtime classpath'ine veya üretilen POM dependency listesine girmez. `tools.build` tekrarlanabilir JAR/POM üretimi ve yerel kurulum için, `deps-deploy` ise Clojars'ın kullanıcı adı + deploy-token akışıyla tek artifact/POM yüklemesi için seçilmiştir. Yayın script'i immutable release riskine karşı temiz worktree, exact tag, tam Faz 9 kapısı, secret scan ve dış tüketici çözümlemesini zorunlu tutar.

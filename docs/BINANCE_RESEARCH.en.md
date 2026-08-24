@@ -150,3 +150,11 @@ Phase 4 bound official HTTP/error/limit behavior to tests: `5xx` can be unknown 
 The Go/JavaScript cross-check confirmed architecture but tightened safety: retry cannot be inferred from HTTP method because cancel is state-changing `DELETE`. Every command uses `:retry-policy :never`.
 
 Phase 8 rechecked the pinned Spot Docs, including 24-hour connections, 20-second ping, one-minute pong deadline, five control messages/second, 1,024 streams, WebSocket shutdown behavior, and current signature-subscription limits. Implementation replies to pong in the transport callback, batches restore, regenerates UDS signatures, and renews at 23h50m. Live credential-free `BTCUSDT@bookTicker` acceptance passed.
+
+## 1.0.3 STOP_LOSS Revalidation Record
+
+The official Spot new-order and filter contracts were rechecked on 2026-08-22. `STOP_LOSS` requires `quantity` plus `stopPrice` or `trailingDelta`, and executes a MARKET order when triggered. `PRICE_FILTER` applies to both `price` and `stopPrice`; `LOT_SIZE` constrains quantity. A matching-engine timeout or `5xx` still means UNKNOWN and must be reconciled through UDS/order query.
+
+Version 1.0.3 adds only the fixed-price `STOP_LOSS` subset required by the bot's concrete catastrophe-protection use case. `trailingDelta`, `STOP_LOSS_LIMIT`, TAKE_PROFIT, and order-list features remain outside scope. This keeps the support claim narrow and testable while preserving the existing single-POST reconciliation boundary.
+
+Sources: [Spot REST trading endpoints](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#new-order-trade), [Spot filters](https://github.com/binance/binance-spot-api-docs/blob/master/filters.md), [Spot User Data Stream](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md).

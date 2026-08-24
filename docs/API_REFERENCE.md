@@ -179,6 +179,18 @@ veya desteklenen sembolde:
  :quote-order-qty 10M}
 ```
 
+Felaket koruması için market-executing STOP_LOSS:
+
+```clojure
+{:symbol "BTCUSDT"
+ :side :sell
+ :type :stop-loss
+ :quantity 0.001M
+ :stop-price 62000M}
+```
+
+`STOP_LOSS`, `quantity` ve `stop-price` ister; `price`, `time-in-force` veya `quote-order-qty` kabul etmez. `stop-price` `PRICE_FILTER` ile doğrulanır. Tetiklendiğinde MARKET çalıştığı için, uygulanabilir market notional filtrelerinde `validate-order`, `test-order`, `new-order` ve `submit-order!` seçeneklerine güncel `:reference-price` verilmelidir. Tetikleyicinin güncel piyasa fiyatına göre doğru tarafta olması dinamik Binance kuralıdır ve sunucu tarafından doğrulanır.
+
 Finansal değerler `BigDecimal`, integer veya strict plain decimal string olabilir; `float`/`double`, exponent notation ve sessiz rounding kabul edilmez.
 
 ## `binance-clj.spot.streams`

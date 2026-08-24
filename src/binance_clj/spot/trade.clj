@@ -11,7 +11,7 @@
     order))
 
 (defn test-order
-  "Validates a MARKET/LIMIT order locally and through Binance without execution."
+  "Validates a MARKET/LIMIT/STOP_LOSS order locally and through Binance without execution."
   ([connector symbol-info order]
    (test-order connector symbol-info order {}))
   ([connector symbol-info order options]
@@ -20,7 +20,7 @@
                     (merge options {:order order :symbol-info symbol-info}))))
 
 (defn new-order
-  "Submits a locally validated MARKET/LIMIT order.
+  "Submits a locally validated MARKET/LIMIT/STOP_LOSS order.
 
   Production use also requires `:enable-live-trading? true` on the client."
   ([connector symbol-info order]

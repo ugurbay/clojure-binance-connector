@@ -219,4 +219,8 @@ Immediately after successful creation, query may briefly return `-2013` because 
 
 The Clojars coordinate is fixed as `io.github.ugurbay/binance-clj` under the verified GitHub reverse-domain group. `VERSION`, Git tag, POM, and JAR version derive from the same source. The artifact is a source JAR containing only `src`, runtime `resources`, the MIT license, AI-development notice, and Maven metadata. Tests, integration fixtures, development code, local toolchains, and credential files are excluded.
 
+## ADR-0052 — Public Boundary for STOP_LOSS Catastrophe Protection
+
+Spot `STOP_LOSS`, a conditional order that executes a MARKET order when triggered, is part of the public order-map contract. The connector enforces only static, provable rules: symbol `orderTypes`, `quantity`, `stopPrice`, `LOT_SIZE`, `PRICE_FILTER`, and market-notional using a current caller-supplied reference price. Trigger direction relative to the live market remains the matching engine's responsibility. The order uses the same new-order endpoint, dual production guard, unique client order ID, single POST, and query/UDS reconciliation policy; there is no separate or weaker transport path.
+
 `io.github.clojure/tools.build` and `slipset/deps-deploy` are build-time dependencies isolated in the `:build` alias; they do not enter the connector runtime classpath or generated POM dependency list. `tools.build` provides reproducible JAR/POM generation and local installation, while `deps-deploy` performs one artifact/POM upload using Clojars' username plus deploy-token flow. Because release artifacts are immutable, the publication script requires a clean worktree, exact tag, full Phase 9 gate, secret scan, and external-consumer resolution before deployment.

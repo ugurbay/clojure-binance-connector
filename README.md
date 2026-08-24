@@ -49,13 +49,13 @@ Clojure CLI projenizin `deps.edn` dosyasına ekleyin:
 
 ```clojure
 {:deps
- {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}}}
 ```
 
 Leiningen kullanan projelerde:
 
 ```clojure
-:dependencies [[io.github.ugurbay/binance-clj "1.0.2"]]
+:dependencies [[io.github.ugurbay/binance-clj "1.0.3"]]
 ```
 
 Artifact yayınlama ve doğrulama süreci için [Clojars Yayın Rehberi](docs/CLOJARS_RELEASE.md) belgesine bakın.
@@ -342,7 +342,7 @@ API key ve HMAC secret config'ten signer'a otomatik bağlanır. Signed parametre
 
 `client/synchronize-time!`, public `/time` çağrısının başlangıç/bitiş midpoint'ini kullanarak default client clock offset'ini günceller. Signed bir iş akışından önce ve uzun yaşayan client'larda periyodik olarak çağrılmalıdır. Custom `:clock` enjekte eden tüketici kendi senkronizasyonundan sorumludur.
 
-`spot/new-order` ve `spot/cancel-order` gerçek state-changing komutlardır ve otomatik retry edilmez. Production'da ayrıca client config'inde `:environment :production` ile `:enable-live-trading? true` birlikte bulunmadıkça yerelde reddedilir. Filtre preflight hiçbir değeri yuvarlamaz; MARKET base quantity kullanılıyorsa uygulanabilir notional kontrolü için çağıran güncel `:reference-price` seçeneğini sağlamalıdır.
+`spot/new-order` ve `spot/cancel-order` gerçek state-changing komutlardır ve otomatik retry edilmez. Production'da ayrıca client config'inde `:environment :production` ile `:enable-live-trading? true` birlikte bulunmadıkça yerelde reddedilir. Filtre preflight hiçbir değeri yuvarlamaz; MARKET veya market-executing `STOP_LOSS` base quantity kullanılıyorsa uygulanabilir notional kontrolü için çağıran güncel `:reference-price` seçeneğini sağlamalıdır.
 
 ## Faz 7 Unknown Execution ve Reconciliation API
 

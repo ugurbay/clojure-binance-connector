@@ -61,7 +61,7 @@
   trade-api/test-order)
 
 (def new-order
-  "Submits a locally validated MARKET/LIMIT order."
+  "Submits a locally validated MARKET/LIMIT/STOP_LOSS order."
   trade-api/new-order)
 
 (def submit-order!

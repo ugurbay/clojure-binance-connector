@@ -1,12 +1,12 @@
 (ns binance-clj.filters
-  "Pure local preflight checks for the V1 Spot MARKET and LIMIT order subset."
+  "Pure local preflight checks for the supported V1 Spot order subset."
   (:require [binance-clj.decimal :as decimal]
             [binance-clj.errors :as errors]
             [clojure.string :as str])
   (:import [java.math BigDecimal]))
 
 (def ^:private sides #{"BUY" "SELL"})
-(def ^:private order-types #{"LIMIT" "MARKET"})
+(def ^:private order-types #{"LIMIT" "MARKET" "STOP_LOSS"})
 (def ^:private time-in-force-values #{"FOK" "GTC" "IOC"})
 
 (def ^:private filter-decimal-fields
@@ -27,7 +27,8 @@
 (defn- enum-value
   [field allowed value]
   (let [normalized (cond
-                     (keyword? value) (str/upper-case (name value))
+                     (keyword? value) (-> value name str/upper-case
+                                          (str/replace "-" "_"))
                      (string? value) (str/upper-case value)
                      :else nil)]
     (when-not (contains? allowed normalized)
@@ -154,19 +155,23 @@
     (fail! "quote-order-qty is not enabled for this symbol."
            {:field :quote-order-qty :rule :quoteOrderQtyMarketAllowed})))
 
+(defn- market-execution?
+  [order]
+  (contains? #{"MARKET" "STOP_LOSS"} (:type order)))
+
 (defn- market-notional
   [order reference-price]
   (if-let [quote-order-qty (:quote-order-qty order)]
     quote-order-qty
     (if reference-price
       (.multiply ^BigDecimal reference-price ^BigDecimal (:quantity order))
-      (fail! "MARKET notional validation requires a reference price."
+      (fail! "Market-executing order notional validation requires a reference price."
              {:field :reference-price
               :rule :market-notional-reference-price}))))
 
 (defn- validate-min-notional!
   [order filter-map reference-price]
-  (let [market? (= "MARKET" (:type order))
+  (let [market? (market-execution? order)
         applies? (or (not market?) (true? (:applyToMarket filter-map)))]
     (when applies?
       (let [notional (if market?
@@ -182,7 +187,7 @@
 
 (defn- validate-notional!
   [order filter-map reference-price]
-  (let [market? (= "MARKET" (:type order))
+  (let [market? (market-execution? order)
         check-min? (or (not market?) (true? (:applyMinToMarket filter-map)))
         check-max? (or (not market?) (true? (:applyMaxToMarket filter-map)))]
     (when (or check-min? check-max?)
@@ -209,8 +214,11 @@
     (let [side (enum-value :side sides (:side order))
           type (enum-value :type order-types (:type order))
           limit? (= "LIMIT" type)
+          market? (= "MARKET" type)
+          stop-loss? (= "STOP_LOSS" type)
           has-quantity? (contains? order :quantity)
-          has-quote-quantity? (contains? order :quote-order-qty)]
+          has-quote-quantity? (contains? order :quote-order-qty)
+          has-stop-price? (contains? order :stop-price)]
       (when (and has-quantity? has-quote-quantity?)
         (fail! "quantity and quote-order-qty cannot be used together."
                {:field :quantity}))
@@ -219,29 +227,45 @@
                             (not (contains? order :time-in-force))))
         (fail! "LIMIT requires quantity, price, and time-in-force."
                {:field :type}))
-      (when (and (not limit?) (not (or has-quantity? has-quote-quantity?)))
+      (when (and market? (not (or has-quantity? has-quote-quantity?)))
         (fail! "MARKET requires quantity or quote-order-qty."
                {:field :type}))
-      (when (and (not limit?)
+      (when (and market?
                  (or (contains? order :price) (contains? order :time-in-force)))
         (fail! "MARKET does not accept price or time-in-force in V1."
+               {:field :type}))
+      (when (and market? has-stop-price?)
+        (fail! "MARKET does not accept stop-price."
+               {:field :type}))
+      (when (and stop-loss?
+                 (or (not has-quantity?)
+                     has-quote-quantity?
+                     (not has-stop-price?)
+                     (contains? order :price)
+                     (contains? order :time-in-force)))
+        (fail! "STOP_LOSS requires quantity and stop-price only."
+               {:field :type}))
+      (when (and limit? has-stop-price?)
+        (fail! "LIMIT does not accept stop-price."
                {:field :type}))
       (cond-> (assoc order :side side :type type)
         has-quantity? (update :quantity #(exact-positive-decimal :quantity %))
         has-quote-quantity? (update :quote-order-qty
                                     #(exact-positive-decimal :quote-order-qty %))
         (contains? order :price) (update :price #(exact-positive-decimal :price %))
+        has-stop-price? (update :stop-price #(exact-positive-decimal :stop-price %))
         (contains? order :time-in-force)
         (update :time-in-force
                 #(enum-value :time-in-force time-in-force-values %))))))
 
 (defn validate-order
-  "Returns a normalized V1 MARKET/LIMIT order or throws a local validation error.
+  "Returns a normalized V1 MARKET/LIMIT/STOP_LOSS order or throws a local validation error.
 
   `symbol-info` is one item from exchangeInfo `:symbols`; known filter numbers may
   be raw strings or normalized BigDecimals. MARKET orders using base `:quantity`
-  require `:reference-price` when an applicable notional filter exists. No value
-  is rounded or adjusted."
+  require `:reference-price` when an applicable notional filter exists. That
+  rule also applies to STOP_LOSS because its trigger executes a MARKET order.
+  No value is rounded or adjusted."
   ([symbol-info order] (validate-order symbol-info order {}))
   ([symbol-info order {:keys [reference-price]}]
    (let [normalized (normalize-shape order)
@@ -254,6 +278,10 @@
      (validate-symbol-contract! symbol-info normalized)
      (when (and price-filter (:price normalized))
        (validate-range! :price (:price normalized) price-filter "PRICE_FILTER"
+                        :minPrice :maxPrice :tickSize))
+     (when (and price-filter (:stop-price normalized))
+       (validate-range! :stop-price (:stop-price normalized)
+                        price-filter "PRICE_FILTER"
                         :minPrice :maxPrice :tickSize))
      (when (and lot-filter (:quantity normalized))
        (validate-range! :quantity (:quantity normalized) lot-filter "LOT_SIZE"

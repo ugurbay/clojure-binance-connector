@@ -170,6 +170,18 @@ or, for supported symbols:
  :quote-order-qty 10M}
 ```
 
+Market-executing STOP_LOSS for catastrophe protection:
+
+```clojure
+{:symbol "BTCUSDT"
+ :side :sell
+ :type :stop-loss
+ :quantity 0.001M
+ :stop-price 62000M}
+```
+
+`STOP_LOSS` requires `quantity` and `stop-price`; it rejects `price`, `time-in-force`, and `quote-order-qty`. `stop-price` is checked against `PRICE_FILTER`. Because the trigger executes a MARKET order, callers must provide a current `:reference-price` option to `validate-order`, `test-order`, `new-order`, and `submit-order!` whenever market-notional filters apply. Whether the trigger is on the correct side of the current market is a dynamic Binance rule validated by the server.
+
 Financial values may be `BigDecimal`, integers, or strict plain-decimal strings. `float`, `double`, exponent notation, and silent rounding are rejected.
 
 ## `binance-clj.spot.streams`

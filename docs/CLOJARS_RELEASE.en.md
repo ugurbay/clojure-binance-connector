@@ -5,7 +5,7 @@
 This document describes the safe and reproducible process for publishing `binance-clj` to Clojars. The target Maven coordinate is:
 
 ```clojure
-io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}
+io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}
 ```
 
 > [!IMPORTANT]
@@ -69,12 +69,12 @@ Clojars publication does not require a Binance API key or secret.
 
 ## 4. Git Commit, Tag, and Push
 
-The publication script rejects a dirty worktree and an untagged commit. Merge the release commit into the main branch, then create and push the tag matching `VERSION`. For `1.0.2`:
+The publication script rejects a dirty worktree and an untagged commit. Merge the release commit into the main branch, then create and push the tag matching `VERSION`. For `1.0.3`:
 
 ```powershell
 git status
-git tag -a v1.0.2 -m 'binance-clj v1.0.2'
-git push origin v1.0.2
+git tag -a v1.0.3 -m 'binance-clj v1.0.3'
+git push origin v1.0.3
 ```
 
 Before tagging, `git status` must be clean and `HEAD` must be the exact commit to publish. If anything is uncertain and no artifact was published, stop the release and inspect Git history before changing tags.
@@ -134,7 +134,7 @@ https://clojars.org/io.github.ugurbay/binance-clj
 Test actual Clojars resolution from a new, empty directory:
 
 ```powershell
-clojure -Srepro -Sdeps '{:deps {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}' -M -e "(require '[binance-clj.core :as core]) (println (core/runtime-info))"
+clojure -Srepro -Sdeps '{:deps {io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}}}' -M -e "(require '[binance-clj.core :as core]) (println (core/runtime-info))"
 ```
 
 The result should include at least `:name "binance-clj"`, `:phase 9`, and `:status :ready`. Clojars/Maven indexes may take a short time to update. If resolution initially fails, never redeploy the same version; wait a few minutes and repeat only the consumer verification.
@@ -145,13 +145,13 @@ The result should include at least `:name "binance-clj"`, `:phase 9`, and `:stat
 
 ```clojure
 {:deps
- {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}}}
 ```
 
 Leiningen:
 
 ```clojure
-:dependencies [[io.github.ugurbay/binance-clj "1.0.2"]]
+:dependencies [[io.github.ugurbay/binance-clj "1.0.3"]]
 ```
 
 Read [Getting Started](GETTING_STARTED.en.md) for Testnet-first usage and [Disclaimer](../DISCLAIMER.en.md) for legal and financial risks.

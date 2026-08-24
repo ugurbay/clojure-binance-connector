@@ -6,6 +6,20 @@ Significant changes are recorded here. The project aims to follow [Semantic Vers
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-08-22
+
+### Added
+
+- Public `validate-order`, `test-order`, `new-order`, and `submit-order!` support for Binance Spot `STOP_LOSS` orders
+- `stopPrice` wire mapping, exact-`BigDecimal` normalization, and `PRICE_FILTER`/`LOT_SIZE`/market-notional preflight
+- Contract tests for required fields, forbidden fields, tick alignment, and exact request parameters
+- Exact-`BigDecimal` normalization for the User Data Stream `executionReport` last-executed-quantity field `l`
+
+### Security
+
+- A bot can now install post-fill catastrophe protection through the public connector boundary without a raw-HTTP escape hatch
+- The `STOP_LOSS` state-changing command uses the existing exactly-one submission and unknown-execution reconciliation policy unchanged
+
 ## [1.0.2] - 2026-08-20
 
 ### Added
@@ -68,7 +82,8 @@ Initial public V1 release candidate.
 - Credential and signature redaction
 - `.env`, key files, and local toolchains excluded from Git
 
-[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ugurbay/clojure-binance-connector/releases/tag/v1.0.0

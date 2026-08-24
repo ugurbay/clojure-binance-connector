@@ -33,6 +33,7 @@
 - Trading timeout, `-1006`, `-1007` ve ilgili `5xx` kesin başarı/başarısızlık bildirmez. Connector aynı request'i otomatik tekrar göndermez; bounded order query sonunda kayıt görülmezse sonuç açıkça `unresolved` kalır.
 - Emir create kadar cancel (`DELETE /api/v3/order`) da state-changing command'dır. HTTP metodu `DELETE` olsa bile network/`5xx` sonrasında genel retry uygulanmaz.
 - Yeni order'ın güncel request weight'i `1` ve unfilled order count etkisi `1`dir. Header bulunmayan rejected response'da yerel order sayacı yalnız ihtiyatlı tahmin olabilir.
+- `STOP_LOSS` için statik `PRICE_FILTER`, `LOT_SIZE` ve market-notional preflight yapılır. Tetikleyicinin anlık piyasa fiyatına göre doğru tarafta olması canlı bir matching-engine kuralıdır; connector bunu tahmin etmez ve Binance rejection'ını korur.
 - REST transport bütün V1 parametrelerini query string'de taşır; form body karıştırma desteği public yüzeyde yoktur.
 - `RAW_REQUESTS` için ayrı response header bulunmadığından transport yalnız gerçek local wire attempt sayısını tutar. Faz 5 `exchangeInfo` rate-limit verisini kayıpsız döndürür; tracker bu server limitlerinden otomatik bir concurrency/throttle bütçesi türetmez.
 - Paramsız public ticker çağrıları resmî sözleşmeye göre geçerli fakat yüksek ağırlıklıdır. Connector doğru dinamik ağırlığı izler; tüketicinin pahalı all-market çağrısını otomatik engellemez.

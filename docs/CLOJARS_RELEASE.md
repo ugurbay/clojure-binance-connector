@@ -5,7 +5,7 @@
 Bu belge `binance-clj` kütüphanesini Clojars'a güvenli ve tekrarlanabilir biçimde yayınlama sürecini açıklar. Hedef Maven koordinatı:
 
 ```clojure
-io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}
+io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}
 ```
 
 > [!IMPORTANT]
@@ -69,12 +69,12 @@ Clojars yayını için Binance API key veya secret gerekmez.
 
 ## 4. Git Commit, Tag ve Push
 
-Yayın script'i kirli worktree'yi ve etiketsiz commit'i reddeder. Release commit'ini main branch'e alın, sonra `VERSION` ile aynı etiketi oluşturup GitHub'a gönderin. `1.0.2` için:
+Yayın script'i kirli worktree'yi ve etiketsiz commit'i reddeder. Release commit'ini main branch'e alın, sonra `VERSION` ile aynı etiketi oluşturup GitHub'a gönderin. `1.0.3` için:
 
 ```powershell
 git status
-git tag -a v1.0.2 -m 'binance-clj v1.0.2'
-git push origin v1.0.2
+git tag -a v1.0.3 -m 'binance-clj v1.0.3'
+git push origin v1.0.3
 ```
 
 Etiketi oluşturmadan önce `git status` temiz olmalı ve `HEAD` tam olarak yayınlanacak commit olmalıdır. Yanlış etiketi veya sürümü tahmin ederek düzeltmeye çalışmayın; yayın yapılmadıysa önce release sürecini durdurup Git geçmişini inceleyin.
@@ -134,7 +134,7 @@ https://clojars.org/io.github.ugurbay/binance-clj
 Yeni ve boş bir klasörde Clojure CLI ile gerçek Clojars çözümlemesini sınayın:
 
 ```powershell
-clojure -Srepro -Sdeps '{:deps {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}' -M -e "(require '[binance-clj.core :as core]) (println (core/runtime-info))"
+clojure -Srepro -Sdeps '{:deps {io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}}}' -M -e "(require '[binance-clj.core :as core]) (println (core/runtime-info))"
 ```
 
 Beklenen sonuçta en azından `:name "binance-clj"`, `:phase 9` ve `:status :ready` bulunur. Clojars/Maven indekslerinin kısa süreli gecikmesi mümkündür; başarısız çözümlemede aynı sürümü yeniden deploy etmeyin, önce birkaç dakika sonra yalnız consumer doğrulamasını tekrarlayın.
@@ -145,13 +145,13 @@ Beklenen sonuçta en azından `:name "binance-clj"`, `:phase 9` ve `:status :rea
 
 ```clojure
 {:deps
- {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}}}
 ```
 
 Leiningen:
 
 ```clojure
-:dependencies [[io.github.ugurbay/binance-clj "1.0.2"]]
+:dependencies [[io.github.ugurbay/binance-clj "1.0.3"]]
 ```
 
 Kütüphanenin Testnet-first kullanımı için [Başlangıç Rehberi](GETTING_STARTED.md), hukuki ve finansal riskler için [Sorumluluk Reddi](../DISCLAIMER.md) okunmalıdır.

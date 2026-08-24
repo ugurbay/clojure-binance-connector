@@ -6,7 +6,7 @@
   #{:a :A :b :B :c :C :h :l :o :p :P :q :Q :v :w :x})
 
 (def ^:private execution-decimal-fields
-  #{:A :B :F :L :n :p :P :q :Q :Y :Z :z})
+  #{:A :B :F :L :l :n :p :P :q :Q :Y :Z :z})
 
 (defn- decimal-value
   [value]

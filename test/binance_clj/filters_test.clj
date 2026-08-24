@@ -10,7 +10,7 @@
    :status "TRADING"
    :isSpotTradingAllowed true
    :quoteOrderQtyMarketAllowed true
-   :orderTypes ["LIMIT" "MARKET"]
+   :orderTypes ["LIMIT" "MARKET" "STOP_LOSS"]
    :filters [{:filterType "PRICE_FILTER"
               :minPrice 10.0M
               :maxPrice 100000.0M
@@ -138,6 +138,51 @@
                                      :side :buy
                                      :type :market
                                      :quantity 0.002M}))))))))
+
+(deftest stop-loss-catastrophe-order-contract-test
+  (let [order {:symbol "BTCUSDT"
+               :side :sell
+               :type :stop-loss
+               :quantity 0.002M
+               :stop-price 4900.0M}
+        result (sut/validate-order symbol-info order {:reference-price 5000M})]
+    (is (= "SELL" (:side result)))
+    (is (= "STOP_LOSS" (:type result)))
+    (is (= 0.002M (:quantity result)))
+    (is (= 4900.0M (:stop-price result)))
+    (is (instance? BigDecimal (:stop-price result))))
+  (doseq [order [{:symbol "BTCUSDT" :side :sell :type :stop-loss
+                  :quantity 0.002M}
+                 {:symbol "BTCUSDT" :side :sell :type :stop-loss
+                  :stop-price 4900M}
+                 {:symbol "BTCUSDT" :side :sell :type :stop-loss
+                  :quantity 0.002M :quote-order-qty 10M :stop-price 4900M}
+                 {:symbol "BTCUSDT" :side :sell :type :stop-loss
+                  :quantity 0.002M :stop-price 4900M :price 4890M}
+                 {:symbol "BTCUSDT" :side :sell :type :stop-loss
+                  :quantity 0.002M :stop-price 4900M :time-in-force :gtc}]]
+    (is (= :validation
+           (errors/error-category
+            (captured-error #(sut/validate-order symbol-info order
+                                                 {:reference-price 5000M}))))))
+  (testing "stop price obeys PRICE_FILTER without rounding"
+    (let [error (captured-error
+                 #(sut/validate-order
+                   symbol-info
+                   {:symbol "BTCUSDT" :side :sell :type :stop-loss
+                    :quantity 0.002M :stop-price 4900.05M}
+                   {:reference-price 5000M}))]
+      (is (= :stop-price (:field (ex-data error))))
+      (is (= "PRICE_FILTER" (:filter-type (ex-data error))))
+      (is (= :tickSize (:rule (ex-data error))))))
+  (testing "stop loss needs a reference price for applicable market notional"
+    (let [error (captured-error
+                 #(sut/validate-order
+                   symbol-info
+                   {:symbol "BTCUSDT" :side :sell :type :stop-loss
+                    :quantity 0.002M :stop-price 4900M}))]
+      (is (= :reference-price (:field (ex-data error))))
+      (is (= :market-notional-reference-price (:rule (ex-data error)))))))
 
 (deftest notional-boundaries-test
   (let [minimum-error (captured-error

@@ -42,13 +42,13 @@ Add the library to your Clojure CLI project's `deps.edn`:
 
 ```clojure
 {:deps
- {io.github.ugurbay/binance-clj {:mvn/version "1.0.2"}}}
+ {io.github.ugurbay/binance-clj {:mvn/version "1.0.3"}}}
 ```
 
 For Leiningen projects:
 
 ```clojure
-:dependencies [[io.github.ugurbay/binance-clj "1.0.2"]]
+:dependencies [[io.github.ugurbay/binance-clj "1.0.3"]]
 ```
 
 See the [Clojars Release Guide](docs/CLOJARS_RELEASE.en.md) for artifact publication and verification.
