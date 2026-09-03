@@ -149,6 +149,28 @@
         (is (= "kept" (get-in result [:data :future])))
         (finally (client/close! connector))))))
 
+(deftest klines-normalization-and-wire-contract-test
+  (let [captured (atom nil)
+        response [[1502942428000
+                   "4261.48000000" "4261.48000000" "4261.48000000"
+                   "4261.48000000" "1.77518300" 1502942428999
+                   "7564.90685100" 3 "0.00000000" "0.00000000"
+                   "0" "future-field"]]
+        connector (client-with-response response captured)
+        result (sut/klines connector "BTCUSDT" "1d"
+                           {:start-time 0 :limit 1})
+        row (get-in result [:data 0])]
+    (try
+      (is (= :spot/klines (:endpoint-id @captured)))
+      (is (= {:symbol "BTCUSDT" :interval "1d" :startTime 0 :limit 1}
+             (:params @captured)))
+      (is (= 2 (:weight @captured)))
+      (doseq [index [1 2 3 4 5 7 9 10]]
+        (is (instance? BigDecimal (nth row index))))
+      (is (= 1502942428000 (nth row 0)))
+      (is (= "future-field" (nth row 12)))
+      (finally (client/close! connector)))))
+
 (deftest dynamic-ticker-weight-test
   (doseq [[selection expected]
           [["BTCUSDT" 2]
@@ -194,7 +216,15 @@
                #(sut/depth connector "BTCUSDT" "not-a-map")
                #(sut/depth connector "BTCUSDT" {:limit 0})
                #(sut/depth connector "BTCUSDT" {:limit 5001})
-               #(sut/depth connector "BTCUSDT" {:unexpected true})]]
+               #(sut/depth connector "BTCUSDT" {:unexpected true})
+               #(sut/klines connector "BTCUSDT" "1D")
+               #(sut/klines connector "BTCUSDT" "1d" {:limit 0})
+               #(sut/klines connector "BTCUSDT" "1d" {:limit 1001})
+               #(sut/klines connector "BTCUSDT" "1d" {:start-time -1})
+               #(sut/klines connector "BTCUSDT" "1d"
+                            {:start-time 20 :end-time 10})
+               #(sut/klines connector "BTCUSDT" "1d" {:time-zone "15:00"})
+               #(sut/klines connector "BTCUSDT" "1d" {:unexpected true})]]
         (is (= :validation (errors/error-category (captured-error operation)))))
       (is (nil? @captured))
       (finally (client/close! connector)))))
@@ -206,6 +236,11 @@
             {:symbol "BTCUSDT" :price "1e-8"}]
            [:spot/depth #(sut/depth % "BTCUSDT")
             {:lastUpdateId 1 :bids [["1.0"]] :asks []}]
+           [:spot/klines #(sut/klines % "BTCUSDT" "1d")
+            [[0 "1.0" "1.1" "0.9" "1.0" "2.0" 59999 "2.0" "three"
+              "1.0" "1.0" "0"]]]
+           [:spot/klines #(sut/klines % "BTCUSDT" "1d")
+            [[0 "1.0"]]]
            [:spot/exchange-info sut/exchange-info {:symbols :not-an-array}]
            [:spot/exchange-info sut/exchange-info
             {:symbols [] :exchangeFilters :not-an-array}]]]

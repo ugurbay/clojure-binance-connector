@@ -135,6 +135,17 @@ Specs retain non-negative static weights. Validation resolves parameter-sensitiv
 
 Endpoint parsers validate object/array shape. Known financial/filter fields become strict `BigDecimal`; timestamps, IDs, and counts remain integers. Depth's first two level values normalize while extra values survive. No unknown object field is dropped. Malformed finance produces safe normalized API errors.
 
+## ADR-0053 — Kline History as Conservative Listing-Age Evidence
+
+Binance `exchangeInfo` does not provide a symbol listing timestamp. The connector therefore
+does not claim an exact listing time. Public `GET /api/v3/klines` is added to the declarative
+registry as a credential-free `:execution :read` path with request weight 2. With
+`startTime=0`, `interval=1d`, and `limit=1`, the first open time is conservative evidence
+that the symbol traded no later than that instant. Bots may use this evidence for a minimum-age
+gate and must remain fail-closed when the response is empty or unverifiable. Financial kline
+positions normalize to `BigDecimal`, timestamps/counts remain integers, and future fields
+are preserved.
+
 ## ADR-0031 — Public Testnet Gate
 
 The no-credential live gate is opt-in through `BINANCE_RUN_PUBLIC_TESTNET=true`; default integration remains offline. It validates ping, time, exchange info, ticker price/24h, book ticker, and depth for BTCUSDT.

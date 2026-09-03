@@ -295,11 +295,12 @@ Public endpoint registry varsayılan client'a gömülüdür. API key gerekmeden 
 (spot/ticker-24h connector {:symbol "BTCUSDT" :type :mini})
 (spot/book-ticker connector "BTCUSDT")
 (spot/depth connector "BTCUSDT" {:limit 100})
+(spot/klines connector "BTCUSDT" "1d" {:start-time 0 :limit 1})
 
 (client/close! connector)
 ```
 
-Ticker seçimi `nil`, sembol metni, sembol dizisi veya `{:symbol ...}` / `{:symbols [...]}` map'i kabul eder. `exchange-info` ayrıca `:permissions`, `:symbol-status` ve `:show-permission-sets?`; `depth` ise `:limit` ve `:symbol-status` seçeneklerini doğrular. Sembol dizileri Binance sözleşmesine uygun JSON-array query parametresine çevrilir. Bilinen fiyat/miktar/notional alanları `BigDecimal` olur; bilinmeyen response alanları korunur.
+Ticker seçimi `nil`, sembol metni, sembol dizisi veya `{:symbol ...}` / `{:symbols [...]}` map'i kabul eder. `exchange-info` ayrıca `:permissions`, `:symbol-status` ve `:show-permission-sets?`; `depth` ise `:limit` ve `:symbol-status` seçeneklerini doğrular. `klines`, case-sensitive interval ile `:start-time`, `:end-time`, `:time-zone` ve `:limit` seçeneklerini kabul eder. Sembol dizileri Binance sözleşmesine uygun JSON-array query parametresine çevrilir. Bilinen fiyat/miktar/notional alanları `BigDecimal` olur; bilinmeyen response alanları korunur.
 
 ## Faz 6 Signed Spot ve Emir Preflight API
 

@@ -63,6 +63,14 @@
     :weight 0
     :validate validation/depth
     :parser normalize/depth}
+   {:id :spot/klines
+    :method :get
+    :path "/api/v3/klines"
+    :security :none
+    :execution :read
+    :weight 2
+    :validate validation/klines
+    :parser normalize/klines}
    {:id :spot/account
     :method :get
     :path "/api/v3/account"

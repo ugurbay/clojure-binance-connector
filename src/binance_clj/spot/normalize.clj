@@ -149,6 +149,32 @@
                               :spot/book-ticker
                               #{:askPrice :askQty :bidPrice :bidQty})))
 
+(def ^:private kline-decimal-indexes
+  #{1 2 3 4 5 7 9 10})
+
+(defn- normalize-kline
+  [value]
+  (when-not (and (sequential? value) (<= 12 (count value)))
+    (fail! "Kline must contain the documented fields."
+           {:endpoint-id :spot/klines}))
+  (let [row (vec value)]
+    (doseq [index [0 6 8]]
+      (when-not (and (integer? (nth row index))
+                     (not (neg? (nth row index))))
+        (fail! "Kline time and trade-count fields must be non-negative integers."
+               {:endpoint-id :spot/klines :field-index index})))
+    (reduce (fn [result index]
+              (assoc result index (parse-decimal :spot/klines (nth result index))))
+            row
+            kline-decimal-indexes)))
+
+(defn klines
+  "Normalizes documented Spot kline financial positions and preserves future fields."
+  [value]
+  (when-not (sequential? value)
+    (fail! "Klines response must be an array." {:endpoint-id :spot/klines}))
+  (mapv normalize-kline value))
+
 (defn- depth-level
   [side value]
   (when-not (and (sequential? value) (<= 2 (count value)))

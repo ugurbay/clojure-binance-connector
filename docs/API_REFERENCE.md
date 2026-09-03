@@ -79,8 +79,13 @@ Uygulama endpointleri için çoğunlukla `binance-clj.client` ve `binance-clj.sp
 | `ticker-24h` | `(spot/ticker-24h c {:symbol "BTCUSDT" :type :mini})` | 24 saat ticker |
 | `book-ticker` | `(spot/book-ticker c "BTCUSDT")` | Best bid/ask |
 | `depth` | `(spot/depth c "BTCUSDT" {:limit 100})` | Order-book snapshot |
+| `klines` | `(spot/klines c "BTCUSDT" "1d" {:start-time 0 :limit 1})` | Mum/Kline geçmişi |
 
 Multi-symbol desteklenen çağrılarda sembol vector veya `{:symbols [...]}` kullanılabilir. Paramsız all-market çağrıları yüksek request weight tüketebilir.
+
+`klines` interval değerini Binance'ın case-sensitive sözleşmesine göre doğrular. İsteğe bağlı
+`:start-time`, `:end-time`, `:limit` ve `:time-zone` alanları desteklenir. Dönüşte fiyat,
+miktar ve hacim alanları `BigDecimal`; zamanlar ve işlem sayısı integer kalır.
 
 ## `binance-clj.spot` — Signed Account
 

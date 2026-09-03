@@ -38,3 +38,13 @@
                     (if (map? options)
                       (assoc options :symbol symbol)
                       options))))
+
+(defn klines
+  "Returns public Spot candlesticks for one symbol and case-sensitive interval."
+  ([connector symbol interval] (klines connector symbol interval {}))
+  ([connector symbol interval options]
+   (client/execute! connector
+                    :spot/klines
+                    (if (map? options)
+                      (assoc options :symbol symbol :interval interval)
+                      options))))

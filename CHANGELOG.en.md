@@ -6,6 +6,15 @@ Significant changes are recorded here. The project aims to follow [Semantic Vers
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-09-03
+
+### Added
+
+- Public `spot/klines` API for Spot `GET /api/v3/klines`
+- Case-sensitive interval, timestamp, limit, and time-zone validation
+- Exact-`BigDecimal` normalization for documented price, quantity, and volume fields
+- A credential-free read path for bots that derive listing-age catalogs from the first daily kline
+
 ## [1.0.3] - 2026-08-22
 
 ### Added
@@ -82,7 +91,8 @@ Initial public V1 release candidate.
 - Credential and signature redaction
 - `.env`, key files, and local toolchains excluded from Git
 
-[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.0...v1.0.1

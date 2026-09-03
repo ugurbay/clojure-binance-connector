@@ -85,6 +85,7 @@ Public endpoints do not require credentials:
 (spot/ticker-price connector "BTCUSDT")
 (spot/book-ticker connector "BTCUSDT")
 (spot/depth connector "BTCUSDT" {:limit 100})
+(spot/klines connector "BTCUSDT" "1d" {:start-time 0 :limit 1})
 
 (client/close! connector)
 ```

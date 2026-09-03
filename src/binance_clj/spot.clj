@@ -36,6 +36,10 @@
   "Returns an order-book snapshot."
   market/depth)
 
+(def klines
+  "Returns public Spot kline/candlestick rows."
+  market/klines)
+
 (def account
   "Returns signed account information."
   account-api/account)

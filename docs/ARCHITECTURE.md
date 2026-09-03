@@ -154,6 +154,17 @@ Endpoint spec'teki `:weight` her zaman non-negative integer ve veri-odaklı kal�
 
 Parserlar Binance object/array şeklini endpoint bazında doğrular. Bilinen price, quantity, volume, notional ve filter alanları strict plain-decimal parser ile `BigDecimal` yapılır; timestamp/id/count alanları integer kalır. Depth level'larının ilk iki elemanı dönüştürülür ve ileriye dönük ek elemanlar korunur. Bilinmeyen object alanları hiçbir seviyede düşürülmez.
 
+## ADR-0053 — Kline Geçmişi ve Muhafazakâr Listing-Age Kanıtı
+
+Binance `exchangeInfo` cevabı sembolün listeleme zamanını sağlamaz. Connector bu nedenle
+kesin bir "listing timestamp" iddiasında bulunmaz. Public `GET /api/v3/klines` çağrısı
+declarative registry'ye `:execution :read`, request weight 2 ve credential gerektirmeyen
+bir yol olarak eklenmiştir. `startTime=0`, `interval=1d`, `limit=1` cevabındaki ilk open
+time, sembolün o tarihten geç olmamak üzere işlem gördüğüne dair muhafazakâr kanıttır.
+Botlar bunu minimum yaş kapısı için kullanabilir; response boş veya doğrulanamazsa fail-closed
+kalmalıdır. Connector finansal kline konumlarını `BigDecimal` yapar, timestamp/count
+alanlarını integer tutar ve gelecekte eklenecek alanları kaybetmez.
+
 Malformed response finansal değerleri raw response'u sızdırmadan normalized `:api` hatası olur. Faz 5 yeni runtime dependency eklemez; Faz 4'ün JDK HTTP ve `data.json` altyapısını kullanır.
 
 ## ADR-0031 — Public Testnet Kabul Kapısı

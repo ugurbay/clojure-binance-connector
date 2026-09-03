@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-09-03
+
+### Eklendi
+
+- Public Spot `GET /api/v3/klines` için `spot/klines` API'si
+- Case-sensitive interval, timestamp, limit ve time-zone doğrulaması
+- Fiyat, miktar ve hacim alanlarında exact `BigDecimal` normalizasyonu
+- İlk günlük mum zamanından listing-age kataloğu oluşturabilen botlar için credential-free okuma yolu
+
 ## [1.0.3] - 2026-08-22
 
 ### Eklendi
@@ -81,7 +90,8 @@
 - Credential ve signature redaction
 - `.env`, key dosyaları ve local toolchain git dışında
 
-[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ugurbay/clojure-binance-connector/compare/v1.0.0...v1.0.1

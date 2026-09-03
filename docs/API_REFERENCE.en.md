@@ -79,8 +79,14 @@ Supported lifecycle helpers are `client/public-config`, `client/close!`, `client
 | `ticker-24h` | `(spot/ticker-24h c {:symbol "BTCUSDT" :type :mini})` | 24-hour ticker |
 | `book-ticker` | `(spot/book-ticker c "BTCUSDT")` | Best bid/ask |
 | `depth` | `(spot/depth c "BTCUSDT" {:limit 100})` | Order-book snapshot |
+| `klines` | `(spot/klines c "BTCUSDT" "1d" {:start-time 0 :limit 1})` | Candlestick/kline history |
 
 Where supported, multi-symbol calls accept a symbol vector or `{:symbols [...]}`. Parameterless all-market calls may consume high request weight.
+
+`klines` validates the interval using Binance's case-sensitive contract. Optional
+`:start-time`, `:end-time`, `:limit`, and `:time-zone` fields are supported. Price,
+quantity, and volume positions return as `BigDecimal`; timestamps and trade counts
+remain integers.
 
 ## `binance-clj.spot` — Signed Account
 

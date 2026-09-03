@@ -10,6 +10,11 @@
 (def ^:private ticker-types
   #{"FULL" "MINI"})
 
+(def ^:private kline-intervals
+  #{"1s" "1m" "3m" "5m" "15m" "30m"
+    "1h" "2h" "4h" "6h" "8h" "12h"
+    "1d" "3d" "1w" "1M"})
+
 (defn- fail!
   [endpoint-id message data]
   (throw (errors/connector-error :validation
@@ -139,6 +144,63 @@
   [{:keys [params] :as context}]
   (let [validated (market-selector context)]
     (assoc validated :request-weight (if (contains? params :symbol) 2 4))))
+
+(defn- non-negative-long!
+  [endpoint-id field value]
+  (when-not (and (integer? value) (<= 0 value Long/MAX_VALUE))
+    (fail! endpoint-id "Timestamp must be a non-negative 64-bit integer."
+           {:field field}))
+  (long value))
+
+(defn- time-zone-value!
+  [endpoint-id value]
+  (let [[_ sign hours minutes]
+        (when (string? value)
+          (re-matches #"([+-]?)([0-9]{1,2})(?::([0-9]{2}))?" value))
+        hour-value (some-> hours Long/parseLong)
+        minute-value (some-> (or minutes "0") Long/parseLong)
+        total (when (and hour-value minute-value (< minute-value 60))
+                (* (if (= sign "-") -1 1)
+                   (+ (* hour-value 60) minute-value)))]
+    (when-not (and total (<= -720 total 840))
+      (fail! endpoint-id "Kline time-zone must be within -12:00 and +14:00."
+             {:field :time-zone}))
+    value))
+
+(defn klines
+  "Validates public Spot kline parameters. Intervals are case-sensitive."
+  [{:keys [endpoint params] :as context}]
+  (let [endpoint-id (:id endpoint)
+        allowed #{:end-time :interval :limit :start-time :symbol :time-zone}]
+    (reject-unknown! endpoint-id allowed params)
+    (doseq [required [:symbol :interval]]
+      (when-not (contains? params required)
+        (fail! endpoint-id "Klines requires symbol and interval."
+               {:field required})))
+    (let [interval (non-blank-name endpoint-id :interval (:interval params))
+          limit (get params :limit 500)]
+      (when-not (contains? kline-intervals interval)
+        (fail! endpoint-id "Kline interval is unsupported or has incorrect case."
+               {:field :interval}))
+      (when-not (and (integer? limit) (<= 1 limit 1000))
+        (fail! endpoint-id "Kline limit must be an integer from 1 to 1000."
+               {:field :limit}))
+      (let [start-time (when (contains? params :start-time)
+                         (non-negative-long! endpoint-id :start-time (:start-time params)))
+            end-time (when (contains? params :end-time)
+                       (non-negative-long! endpoint-id :end-time (:end-time params)))]
+        (when (and start-time end-time (> start-time end-time))
+          (fail! endpoint-id "Kline start-time must not exceed end-time." {}))
+        (assoc context
+               :params (cond-> {:symbol (non-blank-name endpoint-id :symbol (:symbol params))
+                                :interval interval}
+                         (contains? params :start-time) (assoc :startTime start-time)
+                         (contains? params :end-time) (assoc :endTime end-time)
+                         (contains? params :limit) (assoc :limit limit)
+                         (contains? params :time-zone)
+                         (assoc :timeZone
+                                (time-zone-value! endpoint-id (:time-zone params))))
+               :request-weight 2)))))
 
 (defn depth
   "Validates order-book params and resolves its limit-dependent weight."

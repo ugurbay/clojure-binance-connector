@@ -141,6 +141,19 @@ Do not copy per-endpoint generated class networks, silent fallback on schema cha
 9. No removed `!ticker@arr`; use current streams.
 10. No generated OpenAPI or Python model translation.
 
+## 1.0.4 Kline and Listing-Age Revalidation Record
+
+The official Spot REST contract was rechecked on 2026-09-03. The `exchangeInfo`
+symbol object does not provide a listing timestamp. `GET /api/v3/klines` is a public
+market-data call with security type `NONE` and request weight 2; results are chronological
+when `startTime` is supplied. With a daily interval, `startTime=0`, and `limit=1`, the
+first row's open time proves that the symbol traded no later than that instant. It is
+not labeled as the exact Binance listing time; it is conservative evidence for a minimum-age
+gate. Empty or invalid history keeps the bot's entry gate closed.
+
+Sources: [Spot REST API](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md),
+[Kline/Candlestick Data](https://developers.binance.com/en/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data).
+
 ## Validation Records
 
 Phase 3 reproduced official ASCII and full-width Unicode REST HMAC vectors, the official WebSocket HMAC vector, and RFC 8032 Ed25519 test 1. Signed timestamps, receive-window bounds, and raw-UTF-8 WebSocket behavior are contract-tested.

@@ -214,6 +214,20 @@ Spot Testnet API key `https://testnet.binance.vision/` üzerinden oluşturulur. 
 9. `!ticker@arr` implementasyonu yapılmaz; güncel stream seti kullanılır.
 10. OpenAPI generated code veya Python SDK modeli Clojure'a çevrilmez.
 
+## 1.0.4 Kline ve Listing-Age Yeniden Doğrulama Kaydı
+
+Resmî Spot REST sözleşmesi 2026-09-03 tarihinde yeniden incelendi. `exchangeInfo`
+sembol nesnesinde listeleme timestamp'i sağlamaz. `GET /api/v3/klines` güvenlik tipi
+`NONE`, request weight değeri 2 olan public bir market-data çağrısıdır; `startTime`
+verildiğinde sonuçlar kronolojik döner. Günlük interval, `startTime=0` ve `limit=1`
+ile ilk satırın open time değeri, sembolün o andan geç olmamak üzere işlem gördüğünü
+kanıtlar. Bu tarih kesin Binance listeleme anı olarak adlandırılmaz; yalnız minimum
+yaş kapısı için muhafazakâr kanıt olarak kullanılır. Boş/hatalı cevapta botun entry
+kapısı kapalı kalır.
+
+Kaynaklar: [Spot REST API](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md),
+[Kline/Candlestick Data](https://developers.binance.com/en/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data).
+
 ## Faz 3 Signing Doğrulama Kaydı
 
 2026-08-18 tarihinde sabitlenen Spot API Docs commit'i üzerinden aşağıdaki davranışlar tekrar doğrulandı ve contract testine bağlandı:
